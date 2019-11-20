@@ -3,8 +3,8 @@
 
 class FileLoader
 {
-    const FILE_CACHE = 'file:cache';     //set
-    const FILE_CACHE_CLEAR = 'file:cache:clear';     //string
+    const FILE_CACHE = 'file:cache';     //set 缓存列表
+    const FILE_CACHE_CLEAR = 'file:cache:clear';     //string 缓存清理状态
 
     /**
      * @var RedisServer
@@ -12,6 +12,7 @@ class FileLoader
     protected $redisServer;
 
     /**
+     * 存储路径配置，本地和shm路径
      * @var
      */
     protected $option = [
@@ -58,7 +59,8 @@ class FileLoader
         $parse = parse_url($uri);
         if (isset($parse['scheme'])) {
 
-            $savepath = $this->getOption('localpath') . 'download/headimg/' . $parse['host'] . '/' . md5($parse['path']);
+            //生成本地路径
+            $savepath = $this->getOption('localpath') . 'download/' . $parse['host'] . '/' . md5($parse['path']);
             if (!file_exists($savepath)) {
                 $curl = new curl($uri);
                 $dir = dirname($savepath);
@@ -72,11 +74,12 @@ class FileLoader
         }
 
         if ($this->redisServer->exists(self::FILE_CACHE_CLEAR)) {
+            //在缓存清理状态，暂时禁用缓存
             return $fullpath;
         }
 
+        //获取相对路径
         $path = str_replace(ROOT_PATH, '', $fullpath);
-
         $this->redisServer->zAdd(self::FILE_CACHE, time(), $path);
 
         $shmpath = $this->getOption('shmpath');

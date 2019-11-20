@@ -8,7 +8,6 @@ class World {
     {
         var_dump(ROOT_PATH);
         $world = new World();
-        echo 'fjsdklafsdklj';
         $world->progress();
     }
 
@@ -80,7 +79,8 @@ class World {
 
     public function progress()
     {
-        $path = $this->fileLoader->get('http://imgcdn.yuexing.com/static/data/files/mall/ad/logo/43941566369330.jpg');
+        $url = 'https://static.ws.126.net/163/f2e/www/index20170701/images/sprite_img_20181029.svg';//本地文件（绝对地址），或者网络文件
+        $path = $this->fileLoader->get($url);
         var_dump($path);
     }
 }

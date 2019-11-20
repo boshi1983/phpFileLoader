@@ -4,16 +4,19 @@
 class RedisServer
 {
     /**
+     * redis对象
      * @var Redis
      */
     protected $_redis = null;
 
     /**
+     * redis连接配置
      * @var array
      */
     protected $_options = [];
 
     /**
+     * redis库堆栈
      * @var int
      */
     protected $_redisRef = 0;
